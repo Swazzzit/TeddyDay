@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Teddy Day</title>
+    <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2; /* Place container above teddies */
+        }
+
+        .gif-container {
+            opacity: 0;
+            animation: fadeIn 2s ease-in forwards;
+        }
+
+        .gif-container img {
+            max-width: 250px; /* Reduced from 300px */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin-top: 30px; /* Increased from 20px to shift down */
+            font-family: 'Leckerli One', cursive;
+            font-size: 28px; /* Increased from 24px */
+            color: #000000;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            animation: fadeIn 2s ease-in 1s forwards;
+        }
+
+        .teddy {
+            position: fixed;
+            font-size: 40px;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            opacity: 0;
+            z-index: 1; /* Place teddies behind container */
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes floatLeft {
+            0% {
+                transform: translate(-100vw, 100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(100vw, -100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatRight {
+            0% {
+                transform: translate(100vw, 100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-100vw, -100vh) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="gif-container">
+            <img src="https://raw.githubusercontent.com/Swazzzit/TeddyDay/refs/heads/main/bear-urso.gif" alt="Teddy Bear">
+        </div>
+        <div class="message">
+            Happy Teddy Day My TeadyBear 🐻♥️
+        </div>
+    </div>
+
+    <script>
+        function createTeddy(isLeft, index) {
+            const teddy = document.createElement('div');
+            teddy.className = 'teddy';
+            teddy.textContent = '🧸';
+            
+            const startX = isLeft ? -100 : window.innerWidth + 100;
+            const startY = window.innerHeight + Math.random() * 200 - 100; // Varied starting heights
+            
+            // Increased spread for wider coverage
+            const spreadX = (Math.random() - 0.5) * 400; // Doubled horizontal spread
+            const spreadY = Math.random() * 300; // Tripled vertical spread
+            
+            // Add variation to the trajectory
+            const angleVariation = (Math.random() - 0.5) * 45; // ±22.5 degrees variation
+            
+            teddy.style.left = `${startX + spreadX}px`;
+            teddy.style.top = `${startY - spreadY}px`;
+            
+            // Varied durations for more natural movement
+            const duration = 3 + (Math.random() * 3) + (index / 100) * 2;
+            teddy.style.animation = `${isLeft ? 'floatLeft' : 'floatRight'} ${duration}s linear`;
+            
+            // Add random rotation and scale variation
+            const scale = 0.8 + Math.random() * 0.4; // Scale between 0.8 and 1.2
+            teddy.style.transform = `scale(${scale}) rotate(${angleVariation}deg)`;
+            
+            document.body.appendChild(teddy);
+            
+            setTimeout(() => {
+                teddy.remove();
+            }, duration * 1000);
+        }
+
+        function sprayTeddies(isLeft) {
+            // Increased to 100 teddies
+            for(let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    createTeddy(isLeft, i);
+                }, i * 30); // Reduced delay between teddies for denser spray
+            }
+        }
+
+        function startSpray() {
+            let isLeft = true;
+            sprayTeddies(isLeft); // Start first spray immediately
+            setInterval(() => {
+                isLeft = !isLeft;
+                sprayTeddies(isLeft);
+            }, 5000); // Increased interval to accommodate more teddies
+        }
+
+        // Start spraying teddies immediately when gif starts appearing
+        startSpray();
+    </script>
+</body>
+</html>
